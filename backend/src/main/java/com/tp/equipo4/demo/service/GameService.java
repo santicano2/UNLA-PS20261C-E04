@@ -40,6 +40,7 @@ public class GameService {
         game.setGenre(request.getGenre());
         game.setPrice(request.getPrice());
         game.setImageUrl(request.getImageUrl());
+        game.setDownloadUrl(request.getDownloadUrl());
         game.setPublisher(userOpt.get());
 
         Game saved = gameRepository.save(game);
@@ -54,6 +55,7 @@ public class GameService {
                 game.getGenre(),
                 game.getPrice(),
                 game.getImageUrl(),
+                game.getDownloadUrl(),
                 game.getPublisher().getUsername(),
                 game.getCreatedAt()
         );

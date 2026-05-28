@@ -14,4 +14,5 @@ public class GameRequest {
     private String genre;
     private BigDecimal price;
     private String imageUrl;
+    private String downloadUrl;
 }

@@ -34,6 +34,7 @@ export async function createGame(game: {
   genre: string;
   price: number;
   imageUrl: string;
+  downloadUrl?: string;
 }) {
   const token = localStorage.getItem("token");
   const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -112,4 +113,30 @@ export async function getOwnedGames(): Promise<number[]> {
   } catch {
     return [];
   }
+}
+
+export async function getLibrary() {
+  const res = await fetch(`${API_BASE}/purchases/library`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  try {
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function toggleInstall(gameId: number) {
+  const res = await fetch(`${API_BASE}/purchases/${gameId}/install`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+  });
+  return res.json();
+}
+
+export async function toggleFavorite(gameId: number) {
+  const res = await fetch(`${API_BASE}/purchases/${gameId}/favorite`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+  });
+  return res.json();
 }

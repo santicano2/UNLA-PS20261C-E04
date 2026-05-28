@@ -18,7 +18,9 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      getCart().then((items) => setCartCount(items.length || 0)).catch(() => setCartCount(0));
+      getCart()
+        .then((items) => setCartCount(items.length || 0))
+        .catch(() => setCartCount(0));
     } else {
       setCartCount(0);
     }
@@ -27,7 +29,10 @@ export default function Header() {
   useEffect(() => {
     function onCartUpdate() {
       const token = localStorage.getItem("token");
-      if (token) getCart().then((items) => setCartCount(items.length || 0)).catch(() => {});
+      if (token)
+        getCart()
+          .then((items) => setCartCount(items.length || 0))
+          .catch(() => {});
     }
     window.addEventListener("cart-updated", onCartUpdate);
     return () => window.removeEventListener("cart-updated", onCartUpdate);
@@ -48,35 +53,41 @@ export default function Header() {
         Steam
       </Link>
       <div className="flex items-center gap-4">
-          {user ? (
-            <>
-              <span className="text-zinc-400 text-sm">{user.username}</span>
-              {user.role === "developer" && (
-                <Link
-                  href="/publish"
-                  className="text-zinc-400 hover:text-white text-sm transition-colors"
-                >
-                  Publicar
-                </Link>
-              )}
+        {user ? (
+          <>
+            <span className="text-zinc-400 text-sm">{user.username}</span>
+            {user.role === "developer" && (
               <Link
-                href="/cart"
-                className="relative text-zinc-400 hover:text-white text-sm transition-colors"
+                href="/publish"
+                className="text-zinc-400 hover:text-white text-sm transition-colors"
               >
-                Carrito
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-4 bg-[#00d4ff] text-black text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
-                    {cartCount}
-                  </span>
-                )}
+                Publicar
               </Link>
-              <button
-                onClick={handleLogout}
-                className="text-zinc-500 hover:text-white text-sm transition-colors"
-              >
-                Cerrar sesión
-              </button>
-            </>
+            )}
+            <Link
+              href="/library"
+              className="text-zinc-400 hover:text-white text-sm transition-colors"
+            >
+              Biblioteca
+            </Link>
+            <Link
+              href="/cart"
+              className="relative text-zinc-400 hover:text-white text-sm transition-colors"
+            >
+              Carrito
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-4 bg-[#00d4ff] text-black text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="text-zinc-500 hover:text-white text-sm transition-colors cursor-pointer"
+            >
+              Cerrar sesión
+            </button>
+          </>
         ) : (
           <>
             <Link

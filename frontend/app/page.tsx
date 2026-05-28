@@ -9,9 +9,14 @@ export default function Home() {
   const [owned, setOwned] = useState<number[]>([]);
 
   useEffect(() => {
-    getGames().then(setGames).catch(() => setGames([]));
+    getGames()
+      .then(setGames)
+      .catch(() => setGames([]));
     const token = localStorage.getItem("token");
-    if (token) getOwnedGames().then(setOwned).catch(() => {});
+    if (token)
+      getOwnedGames()
+        .then(setOwned)
+        .catch(() => {});
   }, []);
 
   async function handleAddToCart(gameId: number) {
@@ -79,7 +84,7 @@ export default function Home() {
                 ) : (
                   <button
                     onClick={() => handleAddToCart(game.id)}
-                    className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-4 py-2 rounded transition-colors"
+                    className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-4 py-2 rounded transition-colors cursor-pointer"
                   >
                     Agregar al carrito
                   </button>

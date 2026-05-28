@@ -30,6 +30,12 @@ public class Purchase {
     @Column(name = "purchased_at")
     private LocalDateTime purchasedAt;
 
+    @Column(nullable = false)
+    private Boolean installed = false;
+
+    @Column(nullable = false)
+    private Boolean favorite = false;
+
     @PrePersist
     protected void onCreate() {
         purchasedAt = LocalDateTime.now();

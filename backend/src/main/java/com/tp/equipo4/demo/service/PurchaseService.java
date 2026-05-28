@@ -1,7 +1,9 @@
 package com.tp.equipo4.demo.service;
 
+import com.tp.equipo4.demo.dto.LibraryItemResponse;
 import com.tp.equipo4.demo.dto.PurchaseResponse;
 import com.tp.equipo4.demo.entity.CartItem;
+import com.tp.equipo4.demo.entity.Game;
 import com.tp.equipo4.demo.entity.Purchase;
 import com.tp.equipo4.demo.repository.CartItemRepository;
 import com.tp.equipo4.demo.repository.PurchaseRepository;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,5 +47,44 @@ public class PurchaseService {
         return purchaseRepository.findByUserId(userId).stream()
                 .map(p -> p.getGame().getId())
                 .collect(Collectors.toList());
+    }
+
+    public List<LibraryItemResponse> getLibrary(Integer userId) {
+        return purchaseRepository.findByUserId(userId).stream()
+                .map(p -> {
+                    Game g = p.getGame();
+                    return new LibraryItemResponse(
+                            g.getId(),
+                            g.getTitle(),
+                            g.getGenre(),
+                            g.getImageUrl(),
+                            g.getDownloadUrl(),
+                            g.getPublisher().getUsername(),
+                            p.getPurchasedAt(),
+                            p.getInstalled() != null && p.getInstalled(),
+                            p.getFavorite() != null && p.getFavorite()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public boolean toggleInstalled(Integer userId, Integer gameId) {
+        Optional<Purchase> opt = purchaseRepository.findByUserIdAndGameId(userId, gameId);
+        if (opt.isEmpty()) return false;
+        Purchase p = opt.get();
+        p.setInstalled(!Boolean.TRUE.equals(p.getInstalled()));
+        purchaseRepository.save(p);
+        return true;
+    }
+
+    @Transactional
+    public boolean toggleFavorite(Integer userId, Integer gameId) {
+        Optional<Purchase> opt = purchaseRepository.findByUserIdAndGameId(userId, gameId);
+        if (opt.isEmpty()) return false;
+        Purchase p = opt.get();
+        p.setFavorite(!Boolean.TRUE.equals(p.getFavorite()));
+        purchaseRepository.save(p);
+        return true;
     }
 }

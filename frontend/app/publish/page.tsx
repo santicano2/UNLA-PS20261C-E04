@@ -11,6 +11,7 @@ export default function PublishPage() {
   const [genre, setGenre] = useState("Acción");
   const [price, setPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [downloadUrl, setDownloadUrl] = useState("");
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -23,6 +24,7 @@ export default function PublishPage() {
       genre,
       price: parseFloat(price),
       imageUrl,
+      downloadUrl,
     });
 
     if (result.error) {
@@ -96,6 +98,16 @@ export default function PublishPage() {
             placeholder="URL de la imagen"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
+            className="w-full bg-[#111827] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-[#00d4ff] transition-colors"
+          />
+        </div>
+
+        <div>
+          <input
+            type="url"
+            placeholder="URL de descarga"
+            value={downloadUrl}
+            onChange={(e) => setDownloadUrl(e.target.value)}
             className="w-full bg-[#111827] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-[#00d4ff] transition-colors"
           />
         </div>

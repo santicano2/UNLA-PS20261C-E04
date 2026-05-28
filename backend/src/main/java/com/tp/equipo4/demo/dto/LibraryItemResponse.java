@@ -3,20 +3,19 @@ package com.tp.equipo4.demo.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameResponse {
-    private Integer id;
+public class LibraryItemResponse {
+    private Integer gameId;
     private String title;
-    private String description;
     private String genre;
-    private BigDecimal price;
     private String imageUrl;
     private String downloadUrl;
     private String publisher;
-    private LocalDateTime createdAt;
+    private LocalDateTime purchasedAt;
+    private boolean installed;
+    private boolean favorite;
 }
