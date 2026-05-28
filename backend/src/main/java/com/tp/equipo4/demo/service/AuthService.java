@@ -8,6 +8,7 @@ import com.tp.equipo4.demo.entity.User;
 import com.tp.equipo4.demo.repository.UserRepository;
 import com.tp.equipo4.demo.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,9 @@ public class AuthService {
     
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -31,7 +35,7 @@ public class AuthService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         
         User savedUser = userRepository.save(user);
         
@@ -49,7 +53,7 @@ public class AuthService {
         
         User foundUser = user.get();
         
-        if (!foundUser.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
             return new AuthResponse(false, "Credenciales inválidas", null, null);
         }
         

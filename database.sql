@@ -15,9 +15,9 @@ CREATE TABLE users (
 
 -- Test data
 INSERT INTO users (username, email, password) VALUES 
-('bowie_knife99', 'bowie_knife99@gmail.com', '1234'),
-('steam_admin', 'admin@steam.com', '1234'),
-('elite', 'elite@gmail.com', '1234');
+('bowie_knife99', 'bowie_knife99@gmail.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm'),
+('steam_admin', 'admin@steam.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm'),
+('elite', 'elite@gmail.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm');
 
 -- Verify
 SELECT * FROM users;
