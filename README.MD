@@ -3,6 +3,10 @@
 ## Integrantes
 
 - Santiago Cano
+- Tomás Casco
+- Ariel Mendoza
+- Brian Avila
+- Joel Fernandez
 
 ## Stack
 
