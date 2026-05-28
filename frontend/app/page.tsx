@@ -2,22 +2,28 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getGames } from "./services/api";
+import { getGames, addToCart } from "./services/api";
 
 export default function Home() {
   const [games, setGames] = useState<any[]>([]);
 
   useEffect(() => {
-    getGames().then(setGames);
+    getGames().then(setGames).catch(() => setGames([]));
   }, []);
 
-  function handleBuy(game: any) {
+  async function handleAddToCart(gameId: number) {
     const userData = localStorage.getItem("user");
     if (!userData) {
-      alert("Iniciá sesión para comprar juegos");
+      alert("Iniciá sesión para agregar juegos al carrito");
       return;
     }
-    alert(`Compraste ${game.title}`);
+    const result = await addToCart(gameId);
+    if (result.success) {
+      window.dispatchEvent(new Event("cart-updated"));
+      alert("Agregado al carrito");
+    } else {
+      alert(result.error || "Error al agregar al carrito");
+    }
   }
 
   return (
@@ -60,10 +66,10 @@ export default function Home() {
                   ${game.price}
                 </span>
                 <button
-                  onClick={() => handleBuy(game)}
+                  onClick={() => handleAddToCart(game.id)}
                   className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-4 py-2 rounded transition-colors"
                 >
-                  Comprar
+                  Agregar al carrito
                 </button>
               </div>
             </div>

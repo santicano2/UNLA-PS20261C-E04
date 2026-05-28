@@ -53,3 +53,38 @@ export async function getMe() {
   const res = await fetch(`${API_BASE}/auth/me`, { headers });
   return res.json();
 }
+
+export async function getCart() {
+  const token = localStorage.getItem("token");
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}/cart`, { headers });
+  return res.json();
+}
+
+export async function addToCart(gameId: number) {
+  const token = localStorage.getItem("token");
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}/cart/${gameId}`, {
+    method: "POST",
+    headers,
+  });
+  return res.json();
+}
+
+export async function removeFromCart(gameId: number) {
+  const token = localStorage.getItem("token");
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}/cart/${gameId}`, {
+    method: "DELETE",
+    headers,
+  });
+  if (!res.ok) return { error: "Error al quitar del carrito" };
+  try {
+    return await res.json();
+  } catch {
+    return { success: true };
+  }
+}
