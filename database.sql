@@ -50,7 +50,19 @@ INSERT INTO games (title, description, genre, price, image_url, publisher_id) VA
 ('Forza Horizon 6', 'Descubre los asombrosos paisajes de Japón con más de 550 coches reales y conviértete en una leyenda del automovilismo en la mayor aventura de conducción en mundo abierto de Forza Horizon.', 'Carreras', 44.99, 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2483190/27abb1584a118d50d0e3950fd48d557c51981db7/header.jpg?t=1779912021', 2),
 ('007 First Light', 'Gánate el título. 007 First Light es una trepidante aventura de espías llena de acción creada por IO Interactive. Sigue a un joven e ingenioso a la par que temerario James Bond durante su etapa como recluta del programa de entrenamiento del MI6, vive los primeros pasos del espía más famoso del mundo', 'Acción', 39.99, 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/dbe86ebd2edb4c77d113e9e2feefeb90189fabc9/header.jpg?t=1779968100', 3);
 
+-- Purchases
+CREATE TABLE purchases (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  game_id INT NOT NULL,
+  purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (game_id) REFERENCES games(id),
+  UNIQUE KEY (user_id, game_id)
+);
+
 -- Verify
 SELECT * FROM users;
 SELECT * FROM games;
 SELECT * FROM cart_items;
+SELECT * FROM purchases;

@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getCart, removeFromCart } from "../services/api";
+import { useRouter } from "next/navigation";
+import { getCart, removeFromCart, buyCart } from "../services/api";
 
 export default function CartPage() {
+  const router = useRouter();
   const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getCart().then(setItems).catch(() => setItems([]));
@@ -16,6 +19,20 @@ export default function CartPage() {
     if (result.success) {
       setItems((prev) => prev.filter((i) => i.gameId !== gameId));
       window.dispatchEvent(new Event("cart-updated"));
+    }
+  }
+
+  async function handleBuy() {
+    setLoading(true);
+    const result = await buyCart();
+    if (result.success) {
+      window.dispatchEvent(new Event("cart-updated"));
+      setItems([]);
+      alert("Compra realizada con éxito");
+      router.push("/");
+    } else {
+      alert(result.error || "Error al procesar la compra");
+      setLoading(false);
     }
   }
 
@@ -72,8 +89,12 @@ export default function CartPage() {
           <span className="text-zinc-300 font-medium">
             Total: <span className="text-[#00d4ff]">${total.toFixed(2)}</span>
           </span>
-          <button className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium px-6 py-2.5 rounded-lg text-sm transition-colors">
-            Comprar ahora
+          <button
+            onClick={handleBuy}
+            disabled={loading}
+            className="bg-[#00d4ff] hover:bg-[#00b8e6] disabled:opacity-50 disabled:cursor-not-allowed text-black font-medium px-6 py-2.5 rounded-lg text-sm transition-colors"
+          >
+            {loading ? "Procesando..." : "Comprar ahora"}
           </button>
         </div>
       )}

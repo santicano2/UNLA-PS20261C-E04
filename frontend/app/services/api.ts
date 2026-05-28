@@ -88,3 +88,28 @@ export async function removeFromCart(gameId: number) {
     return { success: true };
   }
 }
+
+function authHeaders(): Record<string, string> {
+  const token = localStorage.getItem("token");
+  const h: Record<string, string> = {};
+  if (token) h["Authorization"] = `Bearer ${token}`;
+  return h;
+}
+
+export async function buyCart() {
+  const res = await fetch(`${API_BASE}/purchases`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+  });
+  return res.json();
+}
+
+export async function getOwnedGames(): Promise<number[]> {
+  const res = await fetch(`${API_BASE}/purchases`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  try {
+    return await res.json();
+  } catch {
+    return [];
+  }
+}

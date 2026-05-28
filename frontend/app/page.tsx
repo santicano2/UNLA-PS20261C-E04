@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getGames, addToCart } from "./services/api";
+import { getGames, addToCart, getOwnedGames } from "./services/api";
 
 export default function Home() {
   const [games, setGames] = useState<any[]>([]);
+  const [owned, setOwned] = useState<number[]>([]);
 
   useEffect(() => {
     getGames().then(setGames).catch(() => setGames([]));
+    const token = localStorage.getItem("token");
+    if (token) getOwnedGames().then(setOwned).catch(() => {});
   }, []);
 
   async function handleAddToCart(gameId: number) {
@@ -24,6 +27,10 @@ export default function Home() {
     } else {
       alert(result.error || "Error al agregar al carrito");
     }
+  }
+
+  function isOwned(gameId: number) {
+    return owned.includes(gameId);
   }
 
   return (
@@ -65,12 +72,18 @@ export default function Home() {
                 <span className="text-[#00d4ff] font-medium">
                   ${game.price}
                 </span>
-                <button
-                  onClick={() => handleAddToCart(game.id)}
-                  className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-4 py-2 rounded transition-colors"
-                >
-                  Agregar al carrito
-                </button>
+                {isOwned(game.id) ? (
+                  <span className="text-zinc-500 text-xs font-medium px-4 py-2">
+                    En biblioteca
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => handleAddToCart(game.id)}
+                    className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-4 py-2 rounded transition-colors"
+                  >
+                    Agregar al carrito
+                  </button>
+                )}
               </div>
             </div>
           </div>
