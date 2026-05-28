@@ -34,7 +34,6 @@ export async function createGame(game: {
   genre: string;
   price: number;
   imageUrl: string;
-  downloadUrl?: string;
 }) {
   const token = localStorage.getItem("token");
   const headers: Record<string, string> = { "Content-Type": "application/json" };

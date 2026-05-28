@@ -58,7 +58,6 @@ public class PurchaseService {
                             g.getTitle(),
                             g.getGenre(),
                             g.getImageUrl(),
-                            g.getDownloadUrl(),
                             g.getPublisher().getUsername(),
                             p.getPurchasedAt(),
                             p.getInstalled() != null && p.getInstalled(),

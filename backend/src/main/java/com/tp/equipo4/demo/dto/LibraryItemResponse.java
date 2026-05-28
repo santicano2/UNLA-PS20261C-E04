@@ -13,7 +13,6 @@ public class LibraryItemResponse {
     private String title;
     private String genre;
     private String imageUrl;
-    private String downloadUrl;
     private String publisher;
     private LocalDateTime purchasedAt;
     private boolean installed;

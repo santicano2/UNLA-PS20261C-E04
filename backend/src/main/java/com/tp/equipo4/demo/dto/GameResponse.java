@@ -16,7 +16,6 @@ public class GameResponse {
     private String genre;
     private BigDecimal price;
     private String imageUrl;
-    private String downloadUrl;
     private String publisher;
     private LocalDateTime createdAt;
 }

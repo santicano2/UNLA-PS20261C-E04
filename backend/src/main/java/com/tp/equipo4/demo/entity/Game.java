@@ -33,9 +33,6 @@ public class Game {
     @Column(name = "image_url", length = 500)
     private String imageUrl;
 
-    @Column(name = "download_url", length = 500)
-    private String downloadUrl;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "publisher_id", nullable = false)
     private User publisher;
