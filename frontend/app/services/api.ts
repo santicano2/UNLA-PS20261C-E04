@@ -13,11 +13,43 @@ export async function register(
   username: string,
   email: string,
   password: string,
+  role?: string,
 ) {
   const res = await fetch(`${API_BASE}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, email, password }),
+    body: JSON.stringify({ username, email, password, role }),
   });
+  return res.json();
+}
+
+export async function getGames() {
+  const res = await fetch(`${API_BASE}/games`);
+  return res.json();
+}
+
+export async function createGame(game: {
+  title: string;
+  description: string;
+  genre: string;
+  price: number;
+  imageUrl: string;
+}) {
+  const token = localStorage.getItem("token");
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}/games`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(game),
+  });
+  return res.json();
+}
+
+export async function getMe() {
+  const token = localStorage.getItem("token");
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}/auth/me`, { headers });
   return res.json();
 }

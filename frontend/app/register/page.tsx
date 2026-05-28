@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { register } from "../services/api";
 
 export default function RegisterPage() {
@@ -9,13 +10,14 @@ export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    const data = await register(username, email, password);
+    const data = await register(username, email, password, role);
 
     if (data.success) {
       localStorage.setItem("token", data.token);
@@ -30,9 +32,7 @@ export default function RegisterPage() {
     <div className="min-h-[calc(100vh-73px)] bg-[#0a0e1a] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <p className="text-zinc-500 text-sm tracking-wide">
-            CREAR CUENTA
-          </p>
+          <p className="text-zinc-500 text-sm tracking-wide">CREAR CUENTA</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -69,6 +69,17 @@ export default function RegisterPage() {
             />
           </div>
 
+          <div>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full bg-[#111827] border border-[#1e293b] rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00d4ff] transition-colors"
+            >
+              <option value="user">Usuario</option>
+              <option value="developer">Desarrollador</option>
+            </select>
+          </div>
+
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
           <button
@@ -81,9 +92,9 @@ export default function RegisterPage() {
 
         <p className="text-zinc-500 text-sm text-center mt-8">
           ¿Ya tenés cuenta?{" "}
-          <a href="/login" className="text-[#00d4ff] hover:underline">
+          <Link href="/login" className="text-[#00d4ff] hover:underline">
             Iniciá sesión
-          </a>
+          </Link>
         </p>
       </div>
     </div>

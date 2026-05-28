@@ -28,16 +28,24 @@ export default function Header() {
         Steam
       </Link>
       <div className="flex items-center gap-4">
-        {user ? (
-          <>
-            <span className="text-zinc-400 text-sm">{user.username}</span>
-            <button
-              onClick={handleLogout}
-              className="text-zinc-500 hover:text-white text-sm transition-colors"
-            >
-              Cerrar sesión
-            </button>
-          </>
+          {user ? (
+            <>
+              <span className="text-zinc-400 text-sm">{user.username}</span>
+              {user.role === "developer" && (
+                <Link
+                  href="/publish"
+                  className="text-zinc-400 hover:text-white text-sm transition-colors"
+                >
+                  Publicar
+                </Link>
+              )}
+              <button
+                onClick={handleLogout}
+                className="text-zinc-500 hover:text-white text-sm transition-colors"
+              >
+                Cerrar sesión
+              </button>
+            </>
         ) : (
           <>
             <Link

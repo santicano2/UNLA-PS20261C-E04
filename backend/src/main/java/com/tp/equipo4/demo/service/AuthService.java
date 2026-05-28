@@ -36,11 +36,12 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        
+        user.setRole(request.getRole() != null ? request.getRole() : "user");
+
         User savedUser = userRepository.save(user);
-        
-        String token = jwtUtil.generateToken(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
-        UserDto userDto = new UserDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+
+        String token = jwtUtil.generateToken(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getRole());
+        UserDto userDto = new UserDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getRole());
         return new AuthResponse(true, "Usuario registrado exitosamente", userDto, token);
     }
     
@@ -57,8 +58,8 @@ public class AuthService {
             return new AuthResponse(false, "Credenciales inválidas", null, null);
         }
         
-        String token = jwtUtil.generateToken(foundUser.getId(), foundUser.getUsername(), foundUser.getEmail());
-        UserDto userDto = new UserDto(foundUser.getId(), foundUser.getUsername(), foundUser.getEmail());
+        String token = jwtUtil.generateToken(foundUser.getId(), foundUser.getUsername(), foundUser.getEmail(), foundUser.getRole());
+        UserDto userDto = new UserDto(foundUser.getId(), foundUser.getUsername(), foundUser.getEmail(), foundUser.getRole());
         return new AuthResponse(true, "Login exitoso", userDto, token);
     }
 }

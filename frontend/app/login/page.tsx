@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { login } from "../services/api";
 
 export default function LoginPage() {
@@ -29,9 +30,7 @@ export default function LoginPage() {
     <div className="min-h-[calc(100vh-73px)] bg-[#0a0e1a] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <p className="text-zinc-500 text-sm tracking-wide">
-            INICIAR SESIÓN
-          </p>
+          <p className="text-zinc-500 text-sm tracking-wide">INICIAR SESIÓN</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -69,9 +68,9 @@ export default function LoginPage() {
 
         <p className="text-zinc-500 text-sm text-center mt-8">
           ¿No tenés cuenta?{" "}
-          <a href="/register" className="text-[#00d4ff] hover:underline">
+          <Link href="/register" className="text-[#00d4ff] hover:underline">
             Registrate
-          </a>
+          </Link>
         </p>
       </div>
     </div>
