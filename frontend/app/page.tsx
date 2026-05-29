@@ -107,6 +107,11 @@ export default function Home() {
                   className="object-cover"
                   loading={i === 0 ? "eager" : "lazy"}
                 />
+                {game.discount > 0 && (
+                  <span className="absolute top-2 left-2 bg-green-600 text-white text-xs font-bold px-2 py-0.5 rounded">
+                    -{game.discount}%
+                  </span>
+                )}
               </div>
             )}
             <div className="p-4">
@@ -117,9 +122,16 @@ export default function Home() {
                 <span className="text-zinc-500 text-xs">Desarrollador: {game.publisher}</span>
               </div>
               <div className="flex items-center justify-between mt-4">
-                <span className="text-[#00d4ff] font-medium">
-                  ${game.price}
-                </span>
+                <div className="flex items-center gap-2">
+                  {game.discount > 0 ? (
+                    <>
+                      <span className="text-zinc-500 text-sm line-through">${game.price}</span>
+                      <span className="text-[#00d4ff] font-medium">${game.discountedPrice}</span>
+                    </>
+                  ) : (
+                    <span className="text-[#00d4ff] font-medium">${game.price}</span>
+                  )}
+                </div>
                 {isOwned(game.id) ? (
                   <span className="text-zinc-500 text-xs font-medium px-4 py-2">
                     En biblioteca

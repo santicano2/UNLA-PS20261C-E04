@@ -53,12 +53,19 @@ export default function HistoryPage() {
               </div>
             </div>
             <div className="text-right shrink-0">
-              <p className="text-[#00d4ff] font-medium">
-                ${item.price}
+              <div>
+                {item.discount > 0 ? (
+                  <>
+                    <span className="text-zinc-500 text-xs line-through">${item.price}</span>
+                    <span className="text-[#00d4ff] font-medium ml-1">${item.discountedPrice}</span>
+                  </>
+                ) : (
+                  <span className="text-[#00d4ff] font-medium">${item.price}</span>
+                )}
                 {item.refunded && (
                   <span className="text-red-500 text-xs ml-2">Reembolsado</span>
                 )}
-              </p>
+              </div>
               <p className="text-zinc-600 text-xs mt-0.5">
                 {new Date(item.purchasedAt).toLocaleDateString()}
               </p>

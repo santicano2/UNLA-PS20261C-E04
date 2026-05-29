@@ -40,7 +40,7 @@ export default function CartPage() {
     }
   }
 
-  const total = items.reduce((sum, i) => sum + Number(i.price), 0);
+  const total = items.reduce((sum, i) => sum + Number(i.discountedPrice || i.price), 0);
 
   return (
     <div className="max-w-4xl w-full mx-auto px-6 py-8">
@@ -73,9 +73,16 @@ export default function CartPage() {
               <p className="text-zinc-500 text-xs mt-0.5">{item.genre}</p>
               <p className="text-zinc-500 text-xs">{item.publisher}</p>
             </div>
-            <span className="text-[#00d4ff] font-medium shrink-0">
-              ${item.price}
-            </span>
+            <div className="text-right shrink-0">
+              {item.discount > 0 ? (
+                <>
+                  <span className="text-zinc-500 text-xs line-through block">${item.price}</span>
+                  <span className="text-[#00d4ff] font-medium">${item.discountedPrice}</span>
+                </>
+              ) : (
+                <span className="text-[#00d4ff] font-medium">${item.price}</span>
+              )}
+            </div>
             <button
               onClick={() => handleRemove(item.gameId)}
               className="text-zinc-500 hover:text-red-400 transition-colors shrink-0"

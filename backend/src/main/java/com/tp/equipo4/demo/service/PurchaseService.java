@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,6 +82,10 @@ public class PurchaseService {
         return purchaseRepository.findByUserId(userId).stream()
                 .map(p -> {
                     Game g = p.getGame();
+                    BigDecimal discountedPrice = g.getDiscount() != null && g.getDiscount() > 0
+                            ? g.getPrice().multiply(BigDecimal.valueOf(100 - g.getDiscount()))
+                                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                            : g.getPrice();
                     return new HistoryItemResponse(
                             g.getId(),
                             g.getTitle(),
@@ -88,7 +94,9 @@ public class PurchaseService {
                             g.getPrice(),
                             g.getPublisher().getUsername(),
                             p.getPurchasedAt(),
-                            p.getRefunded() != null && p.getRefunded()
+                            p.getRefunded() != null && p.getRefunded(),
+                            g.getDiscount(),
+                            discountedPrice
                     );
                 })
                 .collect(Collectors.toList());
@@ -96,13 +104,21 @@ public class PurchaseService {
 
     public List<SalesReportItem> getSalesReport(Integer publisherId) {
         return purchaseRepository.findByGamePublisherId(publisherId).stream()
-                .map(p -> new SalesReportItem(
-                        p.getGame().getTitle(),
-                        p.getUser().getUsername(),
-                        p.getPurchasedAt(),
-                        p.getGame().getPrice(),
-                        p.getRefunded() != null && p.getRefunded()
-                ))
+                .map(p -> {
+                    Game g = p.getGame();
+                    BigDecimal discountedPrice = g.getDiscount() != null && g.getDiscount() > 0
+                            ? g.getPrice().multiply(BigDecimal.valueOf(100 - g.getDiscount()))
+                                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                            : g.getPrice();
+                    return new SalesReportItem(
+                            g.getTitle(),
+                            p.getUser().getUsername(),
+                            p.getPurchasedAt(),
+                            g.getPrice(),
+                            discountedPrice,
+                            p.getRefunded() != null && p.getRefunded()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 

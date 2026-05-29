@@ -49,4 +49,24 @@ public class GameController {
         }
         return ResponseEntity.ok(result.get());
     }
+
+    @PatchMapping("/{id}/discount")
+    public ResponseEntity<?> setDiscount(@PathVariable Integer id,
+                                          @RequestBody Map<String, Integer> body,
+                                          Authentication auth) {
+        if (auth == null) return ResponseEntity.status(401).body(Map.of("error", "No autenticado"));
+        var opt = gameRepository.findById(id);
+        if (opt.isEmpty()) return ResponseEntity.notFound().build();
+        Game game = opt.get();
+        if (!game.getPublisher().getId().equals(auth.getPrincipal())) {
+            return ResponseEntity.status(403).body(Map.of("error", "No sos el desarrollador de este juego"));
+        }
+        int discount = body.getOrDefault("discount", 0);
+        if (discount < 0 || discount > 100) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Descuento debe ser 0-100"));
+        }
+        game.setDiscount(discount);
+        gameRepository.save(game);
+        return ResponseEntity.ok(gameService.toResponse(game));
+    }
 }

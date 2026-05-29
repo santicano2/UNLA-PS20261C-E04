@@ -18,7 +18,7 @@ export default function SalesPage() {
     getSalesReport().then(setItems).catch(() => setItems([]));
   }, []);
 
-  const total = items.reduce((sum: number, i: any) => sum + (i.refunded ? 0 : Number(i.price)), 0);
+  const total = items.reduce((sum: number, i: any) => sum + (i.refunded ? 0 : Number(i.discountedPrice || i.price)), 0);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
@@ -46,12 +46,19 @@ export default function SalesPage() {
               <p className="text-zinc-500 text-xs">Comprado por {item.buyerUsername}</p>
             </div>
             <div className="text-right">
-              <p className="text-[#00d4ff] text-sm font-medium">
-                ${item.price}
+              <div>
+                {item.discountedPrice && Number(item.discountedPrice) < Number(item.price) ? (
+                  <>
+                    <span className="text-zinc-500 text-xs line-through">${item.price}</span>
+                    <span className="text-[#00d4ff] text-sm font-medium ml-1">${item.discountedPrice}</span>
+                  </>
+                ) : (
+                  <span className="text-[#00d4ff] text-sm font-medium">${item.price}</span>
+                )}
                 {item.refunded && (
                   <span className="text-red-500 text-xs ml-2">Reembolsado</span>
                 )}
-              </p>
+              </div>
               <p className="text-zinc-600 text-xs">
                 {new Date(item.purchasedAt).toLocaleDateString()}
               </p>

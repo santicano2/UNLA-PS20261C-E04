@@ -18,4 +18,6 @@ public class HistoryItemResponse {
     private String publisher;
     private LocalDateTime purchasedAt;
     private boolean refunded;
+    private Integer discount;
+    private BigDecimal discountedPrice;
 }

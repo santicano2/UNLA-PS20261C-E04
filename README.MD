@@ -8,6 +8,13 @@
 - Brian Avila
 - Joel Fernandez
 
+# US a añadir:
+
+- Registro (usuario/desarrollador)
+- Login
+- Desarrollador pone en oferta juego y elimina oferta
+- Carrousel de ofertas en tienda
+
 ## Stack
 
 - Frontend: Next.js, Typescript, TailwindCSS

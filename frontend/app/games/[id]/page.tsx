@@ -10,6 +10,7 @@ import {
   getWishlist,
   toggleWishlist,
   refundGame,
+  setDiscount,
 } from "../../services/api";
 import {
   CartIcon,
@@ -25,14 +26,19 @@ export default function GameDetailPage() {
   const [wishlisted, setWishlisted] = useState(false);
   const [owned, setOwned] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [discount, setDiscountVal] = useState(0);
 
   const id = Number(params.id);
 
   useEffect(() => {
-    getGame(id).then(setGame);
+    getGame(id).then((g) => {
+      setGame(g);
+      setDiscountVal(g.discount || 0);
+    });
     const u = localStorage.getItem("user");
     if (u) {
-      setUser(JSON.parse(u));
+      const parsed = JSON.parse(u);
+      setUser(parsed);
       getOwnedGames().then((ids) => setOwned(ids.includes(id)));
     }
     getWishlist().then((ids) => setWishlisted(ids.includes(id)));
@@ -71,6 +77,18 @@ export default function GameDetailPage() {
     }
   }
 
+  async function handleSetDiscount() {
+    const r = await setDiscount(id, discount);
+    if (r.id) {
+      setGame(r);
+      showToast("Descuento actualizado");
+    } else {
+      showToast(r.error || "Error", "error");
+    }
+  }
+
+  const isDeveloper = user && user.role === "developer" && game && user.username === game.publisher;
+
   if (!game) return null;
 
   return (
@@ -92,6 +110,11 @@ export default function GameDetailPage() {
             className="object-cover"
             priority
           />
+          {game.discount > 0 && (
+            <span className="absolute top-3 left-3 bg-green-600 text-white text-sm font-bold px-2.5 py-1 rounded">
+              -{game.discount}%
+            </span>
+          )}
         </div>
       )}
 
@@ -104,7 +127,16 @@ export default function GameDetailPage() {
       <p className="text-zinc-400 mt-4 leading-relaxed">{game.description}</p>
 
       <div className="flex items-center gap-4 mt-6">
-        <p className="text-2xl text-[#00d4ff] font-medium">${game.price}</p>
+        <div className="flex items-center gap-2">
+          {game.discount > 0 ? (
+            <>
+              <span className="text-zinc-500 text-lg line-through">${game.price}</span>
+              <span className="text-2xl text-[#00d4ff] font-medium">${game.discountedPrice}</span>
+            </>
+          ) : (
+            <span className="text-2xl text-[#00d4ff] font-medium">${game.price}</span>
+          )}
+        </div>
         <button
           onClick={handleWishlist}
           className={`transition-colors cursor-pointer ${
@@ -134,6 +166,44 @@ export default function GameDetailPage() {
           </button>
         )}
       </div>
+
+      {isDeveloper && (
+        <div className="mt-8 p-4 bg-[#111827] border border-[#1e293b] rounded-lg flex items-center gap-3">
+          <label className="text-zinc-400 text-sm">Descuento:</label>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            value={discount}
+            onChange={(e) => setDiscountVal(Number(e.target.value))}
+            className="w-20 bg-[#0a0e1a] border border-[#1e293b] rounded px-3 py-1.5 text-white text-sm text-center focus:outline-none focus:border-[#00d4ff]"
+          />
+          <span className="text-zinc-500 text-sm">%</span>
+          <button
+            onClick={handleSetDiscount}
+            className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-4 py-1.5 rounded transition-colors cursor-pointer"
+          >
+            Aplicar
+          </button>
+          {game.discount > 0 && (
+            <button
+              onClick={async () => {
+                const r = await setDiscount(id, 0);
+                if (r.id) {
+                  setGame(r);
+                  setDiscountVal(0);
+                  showToast("Descuento eliminado");
+                } else {
+                  showToast(r.error || "Error", "error");
+                }
+              }}
+              className="text-zinc-500 hover:text-red-400 text-xs transition-colors cursor-pointer"
+            >
+              Quitar descuento
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

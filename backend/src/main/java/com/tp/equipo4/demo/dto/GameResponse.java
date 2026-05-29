@@ -18,4 +18,6 @@ public class GameResponse {
     private String imageUrl;
     private String publisher;
     private LocalDateTime createdAt;
+    private Integer discount;
+    private BigDecimal discountedPrice;
 }

@@ -30,6 +30,9 @@ public class Game {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(nullable = false)
+    private Integer discount = 0;
+
     @Column(name = "image_url", length = 500)
     private String imageUrl;
 

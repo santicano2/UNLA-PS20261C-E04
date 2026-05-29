@@ -14,5 +14,6 @@ public class SalesReportItem {
     private String buyerUsername;
     private LocalDateTime purchasedAt;
     private BigDecimal price;
+    private BigDecimal discountedPrice;
     private boolean refunded;
 }

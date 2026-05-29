@@ -188,3 +188,12 @@ export async function refundGame(gameId: number) {
   });
   return res.json();
 }
+
+export async function setDiscount(gameId: number, discount: number) {
+  const res = await fetch(`${API_BASE}/games/${gameId}/discount`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+    body: JSON.stringify({ discount }),
+  });
+  return res.json();
+}

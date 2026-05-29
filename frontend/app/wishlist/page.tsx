@@ -56,6 +56,11 @@ export default function WishlistPage() {
                     className="object-cover"
                     loading={i === 0 ? "eager" : "lazy"}
                   />
+                  {game.discount > 0 && (
+                    <span className="absolute top-2 left-2 bg-green-600 text-white text-xs font-bold px-2 py-0.5 rounded">
+                      -{game.discount}%
+                    </span>
+                  )}
                 </div>
               )}
               <div className="p-4">
@@ -68,9 +73,14 @@ export default function WishlistPage() {
                   </span>
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                  <span className="text-[#00d4ff] font-medium">
-                    ${game.price}
-                  </span>
+                  {game.discount > 0 ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-zinc-500 text-xs line-through">${game.price}</span>
+                      <span className="text-[#00d4ff] font-medium">${game.discountedPrice}</span>
+                    </div>
+                  ) : (
+                    <span className="text-[#00d4ff] font-medium">${game.price}</span>
+                  )}
                 </div>
               </div>
             </Link>

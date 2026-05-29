@@ -9,6 +9,8 @@ import com.tp.equipo4.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,6 +62,13 @@ public class GameService {
         return Optional.of(toResponse(saved));
     }
 
+    public BigDecimal getDiscountedPrice(Game game) {
+        if (game.getDiscount() == null || game.getDiscount() <= 0) return game.getPrice();
+        BigDecimal multiplier = BigDecimal.valueOf(100 - game.getDiscount())
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        return game.getPrice().multiply(multiplier).setScale(2, RoundingMode.HALF_UP);
+    }
+
     public GameResponse toResponse(Game game) {
         return new GameResponse(
                 game.getId(),
@@ -69,7 +78,9 @@ public class GameService {
                 game.getPrice(),
                 game.getImageUrl(),
                 game.getPublisher().getUsername(),
-                game.getCreatedAt()
+                game.getCreatedAt(),
+                game.getDiscount(),
+                getDiscountedPrice(game)
         );
     }
 }

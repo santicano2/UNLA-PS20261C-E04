@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +66,10 @@ public class CartService {
 
     private CartItemResponse toResponse(CartItem item) {
         Game g = item.getGame();
+        BigDecimal discountedPrice = g.getDiscount() != null && g.getDiscount() > 0
+                ? g.getPrice().multiply(BigDecimal.valueOf(100 - g.getDiscount()))
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                : g.getPrice();
         return new CartItemResponse(
                 item.getId(),
                 g.getId(),
@@ -71,7 +77,9 @@ public class CartService {
                 g.getGenre(),
                 g.getPrice(),
                 g.getImageUrl(),
-                g.getPublisher().getUsername()
+                g.getPublisher().getUsername(),
+                g.getDiscount(),
+                discountedPrice
         );
     }
 }
