@@ -56,7 +56,12 @@ export default function Header() {
       <div className="flex items-center gap-4">
         {user ? (
           <>
-            <span className="text-zinc-400 text-sm">{user.username}</span>
+            <Link
+              href="/profile"
+              className="text-zinc-400 hover:text-white text-sm transition-colors"
+            >
+              {user.username}
+            </Link>
             {user.role === "developer" && (
               <Link
                 href="/publish"

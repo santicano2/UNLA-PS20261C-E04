@@ -96,6 +96,17 @@ CREATE TABLE reviews (
   FOREIGN KEY (game_id) REFERENCES games(id)
 );
 
+-- Friends
+CREATE TABLE friends (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  friend_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (friend_id) REFERENCES users(id),
+  UNIQUE KEY (user_id, friend_id)
+);
+
 -- Seed purchases (so users can review)
 INSERT INTO purchases (user_id, game_id) VALUES
 (1, 1),  -- user1 owns Witcher 3
@@ -118,3 +129,5 @@ SELECT * FROM games;
 SELECT * FROM cart_items;
 SELECT * FROM purchases;
 SELECT * FROM wishlist;
+SELECT * FROM reviews;
+SELECT * FROM friends;

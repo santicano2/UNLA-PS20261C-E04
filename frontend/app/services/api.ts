@@ -211,3 +211,41 @@ export async function createReview(gameId: number, rating: number, content: stri
   });
   return res.json();
 }
+
+export async function searchUsers(query: string) {
+  const res = await fetch(`${API_BASE}/users/search?q=${encodeURIComponent(query)}`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function updateUsername(username: string) {
+  const res = await fetch(`${API_BASE}/users/me/username`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+    body: JSON.stringify({ username }),
+  });
+  return res.json();
+}
+
+export async function getFriends() {
+  const res = await fetch(`${API_BASE}/friends`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function addFriend(friendId: number) {
+  const res = await fetch(`${API_BASE}/friends/${friendId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+  });
+  return res.json();
+}
+
+export async function removeFriend(friendId: number) {
+  const res = await fetch(`${API_BASE}/friends/${friendId}`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+  if (!res.ok) return { error: "Error" };
+  try { return await res.json(); } catch { return { success: true }; }
+}

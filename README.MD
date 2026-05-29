@@ -15,6 +15,9 @@
 - Desarrollador pone en oferta juego y elimina oferta
 - Carrousel de ofertas en tienda
 - Reseñas (solo si tiene el juego adquirido)
+- Perfil de usuario (juegos adquiridos y lista de amigos)
+- Personalizacion de perfil (cambio de nombre)
+- Agregar amigo (con buscador de usuarios)
 
 ## Stack
 
