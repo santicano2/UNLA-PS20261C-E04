@@ -46,7 +46,7 @@ public class GameService {
         return Optional.of(toResponse(saved));
     }
 
-    private GameResponse toResponse(Game game) {
+    public GameResponse toResponse(Game game) {
         return new GameResponse(
                 game.getId(),
                 game.getTitle(),

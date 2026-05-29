@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getGames, addToCart, getOwnedGames } from "./services/api";
+import { CartIcon } from "./components/Icons";
 
 export default function Home() {
   const [games, setGames] = useState<any[]>([]);
@@ -50,8 +52,9 @@ export default function Home() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {games.map((game, i) => (
-          <div
+          <Link
             key={game.id}
+            href={`/games/${game.id}`}
             className="bg-[#111827] border border-[#1e293b] rounded-lg overflow-hidden hover:border-[#00d4ff]/30 transition-colors cursor-pointer"
           >
             {game.imageUrl && (
@@ -71,7 +74,7 @@ export default function Home() {
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-zinc-500 text-xs">{game.genre}</span>
                 <span className="text-zinc-600">·</span>
-                <span className="text-zinc-500 text-xs">{game.publisher}</span>
+                <span className="text-zinc-500 text-xs">Desarrollador: {game.publisher}</span>
               </div>
               <div className="flex items-center justify-between mt-4">
                 <span className="text-[#00d4ff] font-medium">
@@ -83,15 +86,18 @@ export default function Home() {
                   </span>
                 ) : (
                   <button
-                    onClick={() => handleAddToCart(game.id)}
-                    className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-4 py-2 rounded transition-colors cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleAddToCart(game.id);
+                    }}
+                    className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black text-xs font-medium px-3 py-2 rounded transition-colors cursor-pointer flex items-center gap-1.5"
                   >
-                    Agregar al carrito
+                    Agregar <CartIcon />
                   </button>
                 )}
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

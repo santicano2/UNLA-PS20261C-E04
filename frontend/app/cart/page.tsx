@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { getCart, removeFromCart, buyCart } from "../services/api";
+import { XIcon } from "../components/Icons";
 
 export default function CartPage() {
   const router = useRouter();
@@ -76,9 +77,9 @@ export default function CartPage() {
             </span>
             <button
               onClick={() => handleRemove(item.gameId)}
-              className="text-zinc-500 hover:text-red-400 text-sm transition-colors shrink-0"
+              className="text-zinc-500 hover:text-red-400 transition-colors shrink-0"
             >
-              Quitar
+              <XIcon />
             </button>
           </div>
         ))}

@@ -139,3 +139,28 @@ export async function toggleFavorite(gameId: number) {
   });
   return res.json();
 }
+
+export async function getGame(id: number) {
+  const res = await fetch(`${API_BASE}/games/${id}`);
+  return res.json();
+}
+
+export async function getWishlist(): Promise<number[]> {
+  const res = await fetch(`${API_BASE}/wishlist`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  try { return await res.json(); } catch { return []; }
+}
+
+export async function getWishlistGames(): Promise<any[]> {
+  const res = await fetch(`${API_BASE}/wishlist/games`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  try { return await res.json(); } catch { return []; }
+}
+
+export async function toggleWishlist(gameId: number) {
+  const res = await fetch(`${API_BASE}/wishlist/${gameId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+  });
+  return res.json();
+}

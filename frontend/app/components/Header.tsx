@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getCart } from "../services/api";
+import { CartIcon } from "../components/Icons";
 
 export default function Header() {
   const pathname = usePathname();
@@ -65,6 +66,12 @@ export default function Header() {
               </Link>
             )}
             <Link
+              href="/wishlist"
+              className="text-zinc-400 hover:text-white text-sm transition-colors"
+            >
+              Deseados
+            </Link>
+            <Link
               href="/library"
               className="text-zinc-400 hover:text-white text-sm transition-colors"
             >
@@ -72,11 +79,12 @@ export default function Header() {
             </Link>
             <Link
               href="/cart"
-              className="relative text-zinc-400 hover:text-white text-sm transition-colors"
+              className="relative text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-1.5"
             >
               Carrito
+              <CartIcon />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-4 bg-[#00d4ff] text-black text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
+                <span className="absolute -top-2 -right-3 bg-[#00d4ff] text-black text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
                   {cartCount}
                 </span>
               )}
