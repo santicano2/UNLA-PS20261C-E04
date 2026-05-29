@@ -84,6 +84,34 @@ CREATE TABLE wishlist (
   UNIQUE KEY (user_id, game_id)
 );
 
+-- Reviews
+CREATE TABLE reviews (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  game_id INT NOT NULL,
+  rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  content TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (game_id) REFERENCES games(id)
+);
+
+-- Seed purchases (so users can review)
+INSERT INTO purchases (user_id, game_id) VALUES
+(1, 1),  -- user1 owns Witcher 3
+(1, 6),  -- user1 owns ELDEN RING
+(1, 5),  -- user1 owns EA SPORTS FC 26
+(2, 2),  -- user2 owns Forza Horizon 6
+(2, 4),  -- user2 owns Resident Evil Requiem
+(2, 3);  -- user2 owns 007 First Light
+
+-- Seed reviews
+INSERT INTO reviews (user_id, game_id, rating, content) VALUES
+(1, 1, 5, 'Simplemente el mejor RPG que he jugado. La historia, los personajes, el mundo... todo es perfecto.'),
+(1, 6, 5, 'Un mundo abierto increíblemente detallado. FromSoftware lo ha vuelto a hacer.'),
+(2, 2, 4, 'Los gráficos son espectaculares y la conducción se siente muy fluida. Japón es un escenario precioso.'),
+(2, 4, 4, 'Buen juego de terror con una ambientación increíble. Algunos puzzles son muy complicados pero vale la pena.');
+
 -- Verify
 SELECT * FROM users;
 SELECT * FROM games;

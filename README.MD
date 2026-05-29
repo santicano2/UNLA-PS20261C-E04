@@ -14,6 +14,7 @@
 - Login
 - Desarrollador pone en oferta juego y elimina oferta
 - Carrousel de ofertas en tienda
+- Reseñas (solo si tiene el juego adquirido)
 
 ## Stack
 

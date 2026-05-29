@@ -11,6 +11,8 @@ import {
   toggleWishlist,
   refundGame,
   setDiscount,
+  getReviews,
+  createReview,
 } from "../../services/api";
 import {
   CartIcon,
@@ -27,6 +29,9 @@ export default function GameDetailPage() {
   const [owned, setOwned] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [discount, setDiscountVal] = useState(0);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewContent, setReviewContent] = useState("");
 
   const id = Number(params.id);
 
@@ -42,6 +47,7 @@ export default function GameDetailPage() {
       getOwnedGames().then((ids) => setOwned(ids.includes(id)));
     }
     getWishlist().then((ids) => setWishlisted(ids.includes(id)));
+    getReviews(id).then(setReviews);
   }, [id]);
 
   async function handleAddToCart() {
@@ -88,6 +94,36 @@ export default function GameDetailPage() {
   }
 
   const isDeveloper = user && user.role === "developer" && game && user.username === game.publisher;
+
+  async function handleSubmitReview() {
+    if (!user) { showToast("Inicia sesión para reseñar", "error"); return; }
+    const r = await createReview(id, reviewRating, reviewContent);
+    if (r.id) {
+      setReviews((prev) => [r, ...prev]);
+      setReviewContent("");
+      showToast("Reseña publicada");
+    } else {
+      showToast(r.error || "Error", "error");
+    }
+  }
+
+  function Stars({ rating, interactive, onChange }: { rating: number; interactive?: boolean; onChange?: (n: number) => void }) {
+    return (
+      <div className="flex items-center gap-0.5">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            disabled={!interactive}
+            onClick={() => onChange?.(n)}
+            className={`text-lg ${interactive ? "cursor-pointer" : ""} ${n <= rating ? "text-yellow-500" : "text-zinc-700"}`}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+    );
+  }
 
   if (!game) return null;
 
@@ -204,6 +240,48 @@ export default function GameDetailPage() {
           )}
         </div>
       )}
+
+      <div className="mt-10 border-t border-[#1e293b] pt-8">
+        <h3 className="text-lg text-zinc-300 font-medium mb-4">Reseñas</h3>
+
+        {user && owned && (
+          <div className="bg-[#111827] border border-[#1e293b] rounded-lg p-4 mb-6">
+            <Stars rating={reviewRating} interactive onChange={setReviewRating} />
+            <textarea
+              placeholder="Escribí tu reseña..."
+              value={reviewContent}
+              onChange={(e) => setReviewContent(e.target.value)}
+              rows={3}
+              className="w-full bg-[#0a0e1a] border border-[#1e293b] rounded-lg px-3 py-2 text-white placeholder-zinc-500 text-sm mt-3 focus:outline-none focus:border-[#00d4ff] transition-colors resize-none"
+            />
+            <button
+              onClick={handleSubmitReview}
+              disabled={!reviewContent.trim()}
+              className="mt-3 bg-[#00d4ff] hover:bg-[#00b8e6] disabled:opacity-50 disabled:cursor-not-allowed text-black text-xs font-medium px-4 py-2 rounded transition-colors"
+            >
+              Publicar reseña
+            </button>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          {reviews.length === 0 && (
+            <p className="text-zinc-600 text-sm text-center py-8">No hay reseñas todavía</p>
+          )}
+          {reviews.map((r) => (
+            <div key={r.id} className="bg-[#111827] border border-[#1e293b] rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-white text-sm font-medium">{r.username}</span>
+                  <Stars rating={r.rating} />
+                </div>
+                <span className="text-zinc-600 text-xs">{new Date(r.createdAt).toLocaleDateString()}</span>
+              </div>
+              {r.content && <p className="text-zinc-400 text-sm mt-2">{r.content}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

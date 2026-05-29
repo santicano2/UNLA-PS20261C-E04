@@ -197,3 +197,17 @@ export async function setDiscount(gameId: number, discount: number) {
   });
   return res.json();
 }
+
+export async function getReviews(gameId: number) {
+  const res = await fetch(`${API_BASE}/games/${gameId}/reviews`);
+  return res.json();
+}
+
+export async function createReview(gameId: number, rating: number, content: string) {
+  const res = await fetch(`${API_BASE}/games/${gameId}/reviews`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+    body: JSON.stringify({ rating, content }),
+  });
+  return res.json();
+}
