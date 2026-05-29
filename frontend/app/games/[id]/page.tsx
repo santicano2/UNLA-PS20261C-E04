@@ -14,6 +14,7 @@ import {
   HeartFilledIcon,
   HeartOutlineIcon,
 } from "../../components/Icons";
+import { showToast } from "../../components/Toast";
 
 export default function GameDetailPage() {
   const params = useParams();
@@ -32,24 +33,18 @@ export default function GameDetailPage() {
   }, [id]);
 
   async function handleAddToCart() {
-    if (!user) {
-      alert("Inicia sesion para agregar al carrito");
-      return;
-    }
+    if (!user) { showToast("Inicia sesión para agregar al carrito", "error"); return; }
     const r = await addToCart(id);
     if (r.success) {
       window.dispatchEvent(new Event("cart-updated"));
-      alert("Agregado al carrito");
+      showToast("Agregado al carrito");
     } else {
-      alert(r.error || "Error");
+      showToast(r.error || "Error", "error");
     }
   }
 
   async function handleWishlist() {
-    if (!user) {
-      alert("Inicia sesion para usar la lista de deseados");
-      return;
-    }
+    if (!user) { showToast("Inicia sesión para usar la lista de deseados", "error"); return; }
     const r = await toggleWishlist(id);
     if (r.added !== undefined) setWishlisted(r.added);
   }

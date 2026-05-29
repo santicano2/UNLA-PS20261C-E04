@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getGames, addToCart, getOwnedGames } from "./services/api";
 import { CartIcon } from "./components/Icons";
+import { showToast } from "./components/Toast";
 
 const GENRES = [
   "Acción", "Aventura", "RPG", "Estrategia",
@@ -42,15 +43,15 @@ export default function Home() {
   async function handleAddToCart(gameId: number) {
     const userData = localStorage.getItem("user");
     if (!userData) {
-      alert("Iniciá sesión para agregar juegos al carrito");
+      showToast("Iniciá sesión para agregar juegos al carrito", "error");
       return;
     }
     const result = await addToCart(gameId);
     if (result.success) {
       window.dispatchEvent(new Event("cart-updated"));
-      alert("Agregado al carrito");
+      showToast("Agregado al carrito");
     } else {
-      alert(result.error || "Error al agregar al carrito");
+      showToast(result.error || "Error al agregar al carrito", "error");
     }
   }
 

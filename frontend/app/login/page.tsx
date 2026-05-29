@@ -60,7 +60,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium rounded-lg py-3 text-sm transition-colors"
+            className="w-full bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium rounded-lg py-3 text-sm transition-colors cursor-pointer"
           >
             INGRESAR
           </button>
@@ -68,7 +68,10 @@ export default function LoginPage() {
 
         <p className="text-zinc-500 text-sm text-center mt-8">
           ¿No tenés cuenta?{" "}
-          <Link href="/register" className="text-[#00d4ff] hover:underline">
+          <Link
+            href="/register"
+            className="text-[#00d4ff] hover:underline cursor-pointer"
+          >
             Registrate
           </Link>
         </p>

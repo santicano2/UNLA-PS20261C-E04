@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { getCart, removeFromCart, buyCart } from "../services/api";
 import { XIcon } from "../components/Icons";
+import { showToast } from "../components/Toast";
 
 export default function CartPage() {
   const router = useRouter();
@@ -26,13 +27,13 @@ export default function CartPage() {
   async function handleBuy() {
     setLoading(true);
     const result = await buyCart();
-    if (result.success) {
-      window.dispatchEvent(new Event("cart-updated"));
-      setItems([]);
-      alert("Compra realizada con éxito");
-      router.push("/");
-    } else {
-      alert(result.error || "Error al procesar la compra");
+      if (result.success) {
+        window.dispatchEvent(new Event("cart-updated"));
+        setItems([]);
+        showToast("Compra realizada con éxito");
+        router.push("/");
+      } else {
+        showToast(result.error || "Error al procesar la compra", "error");
       setLoading(false);
     }
   }

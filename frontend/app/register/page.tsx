@@ -84,7 +84,7 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            className="w-full bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium rounded-lg py-3 text-sm transition-colors"
+            className="w-full bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium rounded-lg py-3 text-sm transition-colors cursor-pointer"
           >
             REGISTRARSE
           </button>
@@ -92,7 +92,10 @@ export default function RegisterPage() {
 
         <p className="text-zinc-500 text-sm text-center mt-8">
           ¿Ya tenés cuenta?{" "}
-          <Link href="/login" className="text-[#00d4ff] hover:underline">
+          <Link
+            href="/login"
+            className="text-[#00d4ff] hover:underline cursor-pointer"
+          >
             Iniciá sesión
           </Link>
         </p>
