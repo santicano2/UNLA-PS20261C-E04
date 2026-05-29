@@ -6,6 +6,7 @@ import com.tp.equipo4.demo.entity.Game;
 import com.tp.equipo4.demo.entity.User;
 import com.tp.equipo4.demo.repository.CartItemRepository;
 import com.tp.equipo4.demo.repository.GameRepository;
+import com.tp.equipo4.demo.repository.PurchaseRepository;
 import com.tp.equipo4.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,9 @@ public class CartService {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private PurchaseRepository purchaseRepository;
+
     public List<CartItemResponse> getCart(Integer userId) {
         return cartItemRepository.findByUserIdOrderByCreatedAtDesc(userId).stream()
                 .map(this::toResponse)
@@ -34,20 +38,23 @@ public class CartService {
     }
 
     @Transactional
-    public boolean addGame(Integer userId, Integer gameId) {
+    public String addGame(Integer userId, Integer gameId) {
         if (cartItemRepository.existsByUserIdAndGameId(userId, gameId)) {
-            return false;
+            return "El juego ya está en el carrito";
+        }
+        if (purchaseRepository.existsByUserIdAndGameIdAndRefundedFalse(userId, gameId)) {
+            return "Ya tienes este juego en tu biblioteca";
         }
         Optional<User> userOpt = userRepository.findById(userId);
         Optional<Game> gameOpt = gameRepository.findById(gameId);
         if (userOpt.isEmpty() || gameOpt.isEmpty()) {
-            return false;
+            return "Juego o usuario no encontrado";
         }
         CartItem item = new CartItem();
         item.setUser(userOpt.get());
         item.setGame(gameOpt.get());
         cartItemRepository.save(item);
-        return true;
+        return null;
     }
 
     @Transactional

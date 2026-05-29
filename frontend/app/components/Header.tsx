@@ -78,6 +78,20 @@ export default function Header() {
               Biblioteca
             </Link>
             <Link
+              href="/history"
+              className="text-zinc-400 hover:text-white text-sm transition-colors"
+            >
+              Historial
+            </Link>
+            {user.role === "developer" && (
+              <Link
+                href="/sales"
+                className="text-zinc-400 hover:text-white text-sm transition-colors"
+              >
+                Ventas
+              </Link>
+            )}
+            <Link
               href="/cart"
               className="relative text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-1.5"
             >

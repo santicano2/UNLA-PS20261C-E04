@@ -28,10 +28,11 @@ public class CartController {
     public ResponseEntity<?> addGame(@PathVariable Integer gameId, Authentication auth) {
         if (auth == null) return ResponseEntity.status(401).body(Map.of("error", "No autenticado"));
         Integer userId = (Integer) auth.getPrincipal();
-        if (cartService.addGame(userId, gameId)) {
+        String error = cartService.addGame(userId, gameId);
+        if (error == null) {
             return ResponseEntity.ok(Map.of("success", true));
         }
-        return ResponseEntity.badRequest().body(Map.of("error", "El juego ya está en el carrito"));
+        return ResponseEntity.badRequest().body(Map.of("error", error));
     }
 
     @DeleteMapping("/{gameId}")

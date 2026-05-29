@@ -40,6 +40,23 @@ public class PurchaseController {
         return ResponseEntity.ok(purchaseService.getLibrary(userId));
     }
 
+    @GetMapping("/history")
+    public ResponseEntity<?> getPurchaseHistory(Authentication auth) {
+        if (auth == null) return ResponseEntity.status(401).body(List.of());
+        Integer userId = (Integer) auth.getPrincipal();
+        return ResponseEntity.ok(purchaseService.getPurchaseHistory(userId));
+    }
+
+    @GetMapping("/sales")
+    public ResponseEntity<?> getSalesReport(Authentication auth) {
+        if (auth == null) return ResponseEntity.status(401).body(List.of());
+        if (!"developer".equals(auth.getDetails())) {
+            return ResponseEntity.status(403).body(Map.of("error", "Solo desarrolladores"));
+        }
+        Integer publisherId = (Integer) auth.getPrincipal();
+        return ResponseEntity.ok(purchaseService.getSalesReport(publisherId));
+    }
+
     @PostMapping("/{gameId}/install")
     public ResponseEntity<?> toggleInstall(@PathVariable Integer gameId, Authentication auth) {
         if (auth == null) return ResponseEntity.status(401).body(Map.of("error", "No autenticado"));
@@ -52,5 +69,14 @@ public class PurchaseController {
         if (auth == null) return ResponseEntity.status(401).body(Map.of("error", "No autenticado"));
         purchaseService.toggleFavorite((Integer) auth.getPrincipal(), gameId);
         return ResponseEntity.ok(Map.of("success", true));
+    }
+
+    @PostMapping("/{gameId}/refund")
+    public ResponseEntity<?> refund(@PathVariable Integer gameId, Authentication auth) {
+        if (auth == null) return ResponseEntity.status(401).body(Map.of("error", "No autenticado"));
+        if (purchaseService.refund((Integer) auth.getPrincipal(), gameId)) {
+            return ResponseEntity.ok(Map.of("success", true));
+        }
+        return ResponseEntity.badRequest().body(Map.of("error", "No tienes este juego"));
     }
 }

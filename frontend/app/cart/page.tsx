@@ -13,7 +13,9 @@ export default function CartPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getCart().then(setItems).catch(() => setItems([]));
+    getCart()
+      .then(setItems)
+      .catch(() => setItems([]));
   }, []);
 
   async function handleRemove(gameId: number) {
@@ -27,13 +29,13 @@ export default function CartPage() {
   async function handleBuy() {
     setLoading(true);
     const result = await buyCart();
-      if (result.success) {
-        window.dispatchEvent(new Event("cart-updated"));
-        setItems([]);
-        showToast("Compra realizada con éxito");
-        router.push("/");
-      } else {
-        showToast(result.error || "Error al procesar la compra", "error");
+    if (result.success) {
+      window.dispatchEvent(new Event("cart-updated"));
+      setItems([]);
+      showToast("Compra realizada con éxito");
+      router.push("/");
+    } else {
+      showToast(result.error || "Error al procesar la compra", "error");
       setLoading(false);
     }
   }
@@ -45,9 +47,7 @@ export default function CartPage() {
       <h2 className="text-xl text-zinc-300 mb-6">Carrito</h2>
 
       {items.length === 0 && (
-        <p className="text-zinc-500 text-center py-20">
-          El carrito está vacío
-        </p>
+        <p className="text-zinc-500 text-center py-20">El carrito está vacío</p>
       )}
 
       <div className="space-y-3">
@@ -94,7 +94,7 @@ export default function CartPage() {
           <button
             onClick={handleBuy}
             disabled={loading}
-            className="bg-[#00d4ff] hover:bg-[#00b8e6] disabled:opacity-50 disabled:cursor-not-allowed text-black font-medium px-6 py-2.5 rounded-lg text-sm transition-colors"
+            className="bg-[#00d4ff] hover:bg-[#00b8e6] disabled:opacity-50 disabled:cursor-not-allowed text-black font-medium px-6 py-2.5 rounded-lg text-sm transition-colors cursor-pointer"
           >
             {loading ? "Procesando..." : "Comprar ahora"}
           </button>

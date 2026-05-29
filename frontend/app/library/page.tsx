@@ -14,7 +14,9 @@ export default function LibraryPage() {
   const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
-    getLibrary().then(setItems).catch(() => setItems([]));
+    getLibrary()
+      .then(setItems)
+      .catch(() => setItems([]));
   }, []);
 
   const filtered = items.filter((item) => {
@@ -121,7 +123,9 @@ export default function LibraryPage() {
                   <span className="text-[10px] text-green-500 shrink-0">●</span>
                 )}
                 {item.favorite && (
-                  <span className="text-[10px] text-yellow-500 shrink-0">★</span>
+                  <span className="text-[10px] text-yellow-500 shrink-0">
+                    ★
+                  </span>
                 )}
               </div>
             </button>
@@ -150,21 +154,22 @@ export default function LibraryPage() {
               </div>
             )}
 
-            <h2 className="text-2xl text-white font-medium">{selected.title}</h2>
+            <h2 className="text-2xl text-white font-medium">
+              {selected.title}
+            </h2>
             <div className="flex items-center gap-2 mt-1 text-zinc-500 text-sm">
               <span>{selected.genre}</span>
               <span>·</span>
               <span>{selected.publisher}</span>
             </div>
             <p className="text-zinc-600 text-xs mt-1">
-              Adquirido{" "}
-              {new Date(selected.purchasedAt).toLocaleDateString()}
+              Adquirido {new Date(selected.purchasedAt).toLocaleDateString()}
             </p>
 
             <div className="flex items-center gap-3 mt-6">
               <button
                 onClick={() => handleFavorite(selected.gameId)}
-                className={`text-lg transition-colors ${
+                className={`text-lg cursor-pointer transition-colors ${
                   selected.favorite
                     ? "text-yellow-500"
                     : "text-zinc-600 hover:text-zinc-400"
@@ -175,12 +180,12 @@ export default function LibraryPage() {
 
               {selected.installed ? (
                 <>
-                  <button className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium px-8 py-2.5 rounded-lg text-sm transition-colors">
+                  <button className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium px-8 py-2.5 rounded-lg text-sm transition-colors cursor-pointer">
                     Jugar
                   </button>
                   <button
                     onClick={handleUninstall}
-                    className="text-zinc-500 hover:text-red-400 text-xs transition-colors"
+                    className="text-zinc-500 hover:text-red-400 text-xs transition-colors cursor-pointer"
                   >
                     Desinstalar
                   </button>
@@ -195,7 +200,7 @@ export default function LibraryPage() {
               ) : (
                 <button
                   onClick={handleDownload}
-                  className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium px-8 py-2.5 rounded-lg text-sm transition-colors"
+                  className="bg-[#00d4ff] hover:bg-[#00b8e6] text-black font-medium px-8 py-2.5 rounded-lg text-sm transition-colors cursor-pointer"
                 >
                   Descargar
                 </button>

@@ -9,7 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
+    List<Purchase> findByUserIdAndRefundedFalse(Integer userId);
     List<Purchase> findByUserId(Integer userId);
-    boolean existsByUserIdAndGameId(Integer userId, Integer gameId);
+    List<Purchase> findByGamePublisherId(Integer publisherId);
+    boolean existsByUserIdAndGameIdAndRefundedFalse(Integer userId, Integer gameId);
     Optional<Purchase> findByUserIdAndGameId(Integer userId, Integer gameId);
 }

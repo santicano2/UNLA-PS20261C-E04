@@ -36,6 +36,9 @@ public class Purchase {
     @Column(nullable = false)
     private Boolean favorite = false;
 
+    @Column(nullable = false)
+    private Boolean refunded = false;
+
     @PrePersist
     protected void onCreate() {
         purchasedAt = LocalDateTime.now();

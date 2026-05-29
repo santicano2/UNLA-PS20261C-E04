@@ -1,7 +1,9 @@
 package com.tp.equipo4.demo.service;
 
+import com.tp.equipo4.demo.dto.HistoryItemResponse;
 import com.tp.equipo4.demo.dto.LibraryItemResponse;
 import com.tp.equipo4.demo.dto.PurchaseResponse;
+import com.tp.equipo4.demo.dto.SalesReportItem;
 import com.tp.equipo4.demo.entity.CartItem;
 import com.tp.equipo4.demo.entity.Game;
 import com.tp.equipo4.demo.entity.Purchase;
@@ -29,8 +31,15 @@ public class PurchaseService {
         List<CartItem> cartItems = cartItemRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
         List<PurchaseResponse> purchased = cartItems.stream()
-                .filter(item -> !purchaseRepository.existsByUserIdAndGameId(userId, item.getGame().getId()))
+                .filter(item -> !purchaseRepository.existsByUserIdAndGameIdAndRefundedFalse(userId, item.getGame().getId()))
                 .map(item -> {
+                    var existing = purchaseRepository.findByUserIdAndGameId(userId, item.getGame().getId());
+                    if (existing.isPresent() && existing.get().getRefunded()) {
+                        Purchase p = existing.get();
+                        p.setRefunded(false);
+                        purchaseRepository.save(p);
+                        return new PurchaseResponse(item.getGame().getId(), item.getGame().getTitle());
+                    }
                     Purchase purchase = new Purchase();
                     purchase.setUser(item.getUser());
                     purchase.setGame(item.getGame());
@@ -44,13 +53,13 @@ public class PurchaseService {
     }
 
     public List<Integer> getUserOwnedGameIds(Integer userId) {
-        return purchaseRepository.findByUserId(userId).stream()
+        return purchaseRepository.findByUserIdAndRefundedFalse(userId).stream()
                 .map(p -> p.getGame().getId())
                 .collect(Collectors.toList());
     }
 
     public List<LibraryItemResponse> getLibrary(Integer userId) {
-        return purchaseRepository.findByUserId(userId).stream()
+        return purchaseRepository.findByUserIdAndRefundedFalse(userId).stream()
                 .map(p -> {
                     Game g = p.getGame();
                     return new LibraryItemResponse(
@@ -64,6 +73,36 @@ public class PurchaseService {
                             p.getFavorite() != null && p.getFavorite()
                     );
                 })
+                .collect(Collectors.toList());
+    }
+
+    public List<HistoryItemResponse> getPurchaseHistory(Integer userId) {
+        return purchaseRepository.findByUserId(userId).stream()
+                .map(p -> {
+                    Game g = p.getGame();
+                    return new HistoryItemResponse(
+                            g.getId(),
+                            g.getTitle(),
+                            g.getGenre(),
+                            g.getImageUrl(),
+                            g.getPrice(),
+                            g.getPublisher().getUsername(),
+                            p.getPurchasedAt(),
+                            p.getRefunded() != null && p.getRefunded()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<SalesReportItem> getSalesReport(Integer publisherId) {
+        return purchaseRepository.findByGamePublisherId(publisherId).stream()
+                .map(p -> new SalesReportItem(
+                        p.getGame().getTitle(),
+                        p.getUser().getUsername(),
+                        p.getPurchasedAt(),
+                        p.getGame().getPrice(),
+                        p.getRefunded() != null && p.getRefunded()
+                ))
                 .collect(Collectors.toList());
     }
 
@@ -83,6 +122,17 @@ public class PurchaseService {
         if (opt.isEmpty()) return false;
         Purchase p = opt.get();
         p.setFavorite(!Boolean.TRUE.equals(p.getFavorite()));
+        purchaseRepository.save(p);
+        return true;
+    }
+
+    @Transactional
+    public boolean refund(Integer userId, Integer gameId) {
+        Optional<Purchase> opt = purchaseRepository.findByUserIdAndGameId(userId, gameId);
+        if (opt.isEmpty()) return false;
+        Purchase p = opt.get();
+        p.setRefunded(true);
+        p.setInstalled(false);
         purchaseRepository.save(p);
         return true;
     }

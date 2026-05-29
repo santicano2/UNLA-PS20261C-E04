@@ -168,3 +168,23 @@ export async function toggleWishlist(gameId: number) {
   });
   return res.json();
 }
+
+export async function getPurchaseHistory(): Promise<any[]> {
+  const res = await fetch(`${API_BASE}/purchases/history`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  try { return await res.json(); } catch { return []; }
+}
+
+export async function getSalesReport(): Promise<any[]> {
+  const res = await fetch(`${API_BASE}/purchases/sales`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  try { return await res.json(); } catch { return []; }
+}
+
+export async function refundGame(gameId: number) {
+  const res = await fetch(`${API_BASE}/purchases/${gameId}/refund`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+  });
+  return res.json();
+}
