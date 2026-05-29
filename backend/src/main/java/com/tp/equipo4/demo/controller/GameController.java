@@ -24,8 +24,10 @@ public class GameController {
     private GameRepository gameRepository;
 
     @GetMapping
-    public ResponseEntity<List<GameResponse>> getAllGames() {
-        return ResponseEntity.ok(gameService.getAllGames());
+    public ResponseEntity<List<GameResponse>> getAllGames(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String genre) {
+        return ResponseEntity.ok(gameService.getAllGames(search, genre));
     }
 
     @GetMapping("/{id}")

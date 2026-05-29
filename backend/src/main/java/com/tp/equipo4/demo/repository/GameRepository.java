@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Integer> {
     List<Game> findAllByOrderByCreatedAtDesc();
+    List<Game> findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(String title);
+    List<Game> findByGenreOrderByCreatedAtDesc(String genre);
+    List<Game> findByTitleContainingIgnoreCaseAndGenreOrderByCreatedAtDesc(String title, String genre);
 }

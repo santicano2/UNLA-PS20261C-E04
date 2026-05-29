@@ -41,7 +41,7 @@ CREATE TABLE cart_items (
 
 -- Test data
 INSERT INTO users (username, email, password, role) VALUES 
-('bowie_knife99', 'bowie_knife99@gmail.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm', 'user'),
+('userTest', 'user@test.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm', 'user'),
 ('CD Project RED', 'cd@steam.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm', 'developer'),
 ('Playground Games', 'playground@steam.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm', 'developer'),
 ('IO Interactive A/S', 'io@steam.com', '$2b$10$9tJUohImBdLgeC32cXuL6uI.vhxAvCgfSp7/9EEqOztwD1cjEwNdm', 'developer'),

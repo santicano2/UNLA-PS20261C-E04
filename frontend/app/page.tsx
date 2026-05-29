@@ -1,25 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getGames, addToCart, getOwnedGames } from "./services/api";
 import { CartIcon } from "./components/Icons";
 
+const GENRES = [
+  "Acción", "Aventura", "RPG", "Estrategia",
+  "Carreras", "Puzzle", "Simulación", "Deportes",
+];
+
 export default function Home() {
   const [games, setGames] = useState<any[]>([]);
   const [owned, setOwned] = useState<number[]>([]);
+  const [search, setSearch] = useState("");
+  const [genre, setGenre] = useState("");
 
   useEffect(() => {
-    getGames()
-      .then(setGames)
-      .catch(() => setGames([]));
     const token = localStorage.getItem("token");
     if (token)
       getOwnedGames()
         .then(setOwned)
         .catch(() => {});
   }, []);
+
+  const fetchGames = useCallback(async (q: string, g: string) => {
+    try {
+      const data = await getGames(q || undefined, g || undefined);
+      setGames(data);
+    } catch {
+      setGames([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => fetchGames(search, genre), 300);
+    return () => clearTimeout(timer);
+  }, [search, genre, fetchGames]);
 
   async function handleAddToCart(gameId: number) {
     const userData = localStorage.getItem("user");
@@ -42,7 +60,28 @@ export default function Home() {
 
   return (
     <div className="max-w-6xl w-full mx-auto px-6 py-8">
-      <h2 className="text-xl text-zinc-300 mb-6">Tienda</h2>
+      <div className="flex items-center gap-4 mb-6">
+        <h2 className="text-xl text-zinc-300 shrink-0">Tienda</h2>
+        <div className="flex items-center gap-3 flex-1 max-w-xl">
+          <input
+            type="text"
+            placeholder="Buscar juegos..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 bg-[#111827] border border-[#1e293b] rounded-lg px-3 py-2 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-[#00d4ff] transition-colors"
+          />
+          <select
+            value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+            className="bg-[#111827] border border-[#1e293b] rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00d4ff] transition-colors"
+          >
+            <option value="">Todos</option>
+            {GENRES.map((g) => (
+              <option key={g} value={g}>{g}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       {games.length === 0 && (
         <p className="text-zinc-500 text-center py-20">

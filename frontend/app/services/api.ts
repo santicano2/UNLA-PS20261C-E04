@@ -23,8 +23,12 @@ export async function register(
   return res.json();
 }
 
-export async function getGames() {
-  const res = await fetch(`${API_BASE}/games`);
+export async function getGames(search?: string, genre?: string) {
+  const params = new URLSearchParams();
+  if (search) params.set("search", search);
+  if (genre) params.set("genre", genre);
+  const qs = params.toString();
+  const res = await fetch(`${API_BASE}/games${qs ? "?" + qs : ""}`);
   return res.json();
 }
 

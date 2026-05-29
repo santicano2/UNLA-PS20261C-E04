@@ -77,10 +77,10 @@ export default function WishlistPage() {
             <div className="px-4 pb-4">
               <button
                 onClick={() => handleRemove(game.id)}
-                className="flex items-center gap-1.5 text-zinc-500 hover:text-red-400 text-xs transition-colors"
+                className="flex items-center gap-1.5 text-zinc-500 hover:text-red-400 text-xs transition-colors cursor-pointer"
               >
                 <HeartFilledIcon />
-                <span className="cursor-pointer">Quitar de deseados</span>
+                <span>Quitar de deseados</span>
               </button>
             </div>
           </div>

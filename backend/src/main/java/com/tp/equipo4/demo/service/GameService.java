@@ -22,8 +22,22 @@ public class GameService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<GameResponse> getAllGames() {
-        return gameRepository.findAllByOrderByCreatedAtDesc().stream()
+    public List<GameResponse> getAllGames(String search, String genre) {
+        boolean hasSearch = search != null && !search.isBlank();
+        boolean hasGenre = genre != null && !genre.isBlank();
+
+        List<Game> games;
+        if (hasSearch && hasGenre) {
+            games = gameRepository.findByTitleContainingIgnoreCaseAndGenreOrderByCreatedAtDesc(search, genre);
+        } else if (hasSearch) {
+            games = gameRepository.findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(search);
+        } else if (hasGenre) {
+            games = gameRepository.findByGenreOrderByCreatedAtDesc(genre);
+        } else {
+            games = gameRepository.findAllByOrderByCreatedAtDesc();
+        }
+
+        return games.stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }

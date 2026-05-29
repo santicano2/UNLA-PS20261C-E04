@@ -96,7 +96,7 @@ export default function GameDetailPage() {
           <div className="flex items-center gap-2 mt-4 justify-end">
             <button
               onClick={handleWishlist}
-              className={`transition-colors ${
+              className={`transition-colors cursor-pointer ${
                 wishlisted
                   ? "text-red-500"
                   : "text-zinc-600 hover:text-zinc-400"
