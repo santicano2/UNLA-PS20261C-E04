@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getGames, addToCart, getOwnedGames } from "./services/api";
 import { CartIcon } from "./components/Icons";
 import { showToast } from "./components/Toast";
+import SaleCarousel from "./components/SaleCarousel";
 
 const GENRES = [
   "Acción", "Aventura", "RPG", "Estrategia",
@@ -83,6 +84,10 @@ export default function Home() {
           </select>
         </div>
       </div>
+
+      <SaleCarousel games={games.filter((g) => g.discount > 0)} />
+
+      <h2 className="text-xl text-zinc-300 mb-4">Todos los juegos</h2>
 
       {games.length === 0 && (
         <p className="text-zinc-500 text-center py-20">
