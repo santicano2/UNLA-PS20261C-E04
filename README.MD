@@ -34,9 +34,9 @@ mysql -u root -p < database.sql
 
 Los usuarios de prueba tienen password `1234`:
 
-- `steam_admin` (rol developer)
-- `elite` (rol developer)
-- `bowie_knife99` (rol user)
+- `user1@test.com` (rol developer)
+- `ea@steam.com` (rol developer)
+- `capcom@steam.com` (rol developer)
 
 ### 2. Backend
 
@@ -64,32 +64,3 @@ npm run dev
 ```
 
 El servidor arranca en `http://localhost:3000`.
-
-## Rutas
-
-| Ruta        | Descripcion                                 |
-| ----------- | ------------------------------------------- |
-| `/`         | Tienda: lista de juegos, agregar al carrito |
-| `/login`    | Iniciar sesion                              |
-| `/register` | Registrarse (usuario o desarrollador)       |
-| `/publish`  | Publicar juego (solo desarrolladores)       |
-| `/cart`     | Carrito de compras                          |
-| `/library`  | Biblioteca con juegos adquiridos y descarga |
-
-## API endpoints
-
-| Metodo | Ruta                           | Auth           | Descripcion                |
-| ------ | ------------------------------ | -------------- | -------------------------- |
-| POST   | `/auth/register`               | No             | Registrar usuario          |
-| POST   | `/auth/login`                  | No             | Iniciar sesion             |
-| GET    | `/auth/me`                     | Si             | Datos del usuario actual   |
-| GET    | `/games`                       | No             | Listar juegos              |
-| POST   | `/games`                       | Si (developer) | Publicar juego             |
-| GET    | `/cart`                        | Si             | Ver carrito                |
-| POST   | `/cart/{gameId}`               | Si             | Agregar al carrito         |
-| DELETE | `/cart/{gameId}`               | Si             | Quitar del carrito         |
-| POST   | `/purchases`                   | Si             | Comprar carrito            |
-| GET    | `/purchases`                   | Si             | IDs de juegos comprados    |
-| GET    | `/purchases/library`           | Si             | Biblioteca completa        |
-| POST   | `/purchases/{gameId}/install`  | Si             | Instalar/desinstalar juego |
-| POST   | `/purchases/{gameId}/favorite` | Si             | Marcar/desmarcar favorito  |
