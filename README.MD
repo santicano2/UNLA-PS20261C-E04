@@ -1,5 +1,7 @@
 # TP Proyecto de Software - Equipo 4
 
+TP grupal de Proyecto de Software, aplicación STEAM
+
 ## Integrantes
 
 - Santiago Cano
@@ -7,17 +9,6 @@
 - Ariel Mendoza
 - Brian Avila
 - Joel Fernandez
-
-# US a añadir:
-
-- Registro (usuario/desarrollador)
-- Login
-- Desarrollador pone en oferta juego y elimina oferta
-- Carrousel de ofertas en tienda
-- Reseñas (solo si tiene el juego adquirido)
-- Perfil de usuario (juegos adquiridos y lista de amigos)
-- Personalizacion de perfil (cambio de nombre)
-- Agregar amigo (con buscador de usuarios)
 
 ## Stack
 
